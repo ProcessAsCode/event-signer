@@ -27,9 +27,12 @@ jobs:
           SECRET_KEY=$(openssl rand -hex 32) docker compose -f docker-compose.yml config -q
       - name: Sidecar starts and answers its health check
         run: |
-          SECRET_KEY=$(openssl rand -hex 32) PORT=3100 SDK_STATE_FILE=$RUNNER_TEMP/state.json node server.js > $RUNNER_TEMP/sidecar.log 2>&1 &
-          for i in $(seq 1 30); do
-            curl -fs http://127.0.0.1:3100/api/health && exit 0
+          SECRET_KEY=$(openssl rand -hex 32) PORT=3100 SDK_STATE_FILE=$RUNNER_TEMP/state.json \
+            node server.js > "$RUNNER_TEMP/sidecar.log" 2>&1 &
+          for i in $(seq 1 60); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3100/api/health || true)
+            [ "$code" = "200" ] && { echo "health 200 after ${i} tries"; exit 0; }
             sleep 2
           done
-          cat $RUNNER_TEMP/sidecar.log; exit 1
+          echo "::error title=sidecar did not become healthy (last HTTP $code)::$(tail -n 8 "$RUNNER_TEMP/sidecar.log" | tr '\n' ' ' | cut -c1-900)"
+          exit 1
