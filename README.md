@@ -1,5 +1,7 @@
 # PaC Event Signer
 
+[![CI](https://github.com/ProcessAsCode/event-signer/actions/workflows/ci.yml/badge.svg)](https://github.com/ProcessAsCode/event-signer/actions/workflows/ci.yml)
+
 Docker sidecar that signs every process and document transaction as a W3C Verifiable Credential, giving a Process-as-Code deployment a tamper-evident audit trail. Part of the [Process-as-Code](https://github.com/ProcessAsCode) stack.
 
 The first integration profile covers document lifecycle events in a Document Management System such as [OpenDMS](https://github.com/ProcessAsCode/opendms).
