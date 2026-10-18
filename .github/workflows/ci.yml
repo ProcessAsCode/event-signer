@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - name: Unit tests
+        run: node --test test/ai-extension.test.js
+      - name: Compose file refuses to start without SECRET_KEY
+        run: |
+          if docker compose -f docker-compose.yml config -q 2>/dev/null; then
+            echo "docker-compose.yml accepted a missing SECRET_KEY"; exit 1
+          fi
+          SECRET_KEY=$(openssl rand -hex 32) docker compose -f docker-compose.yml config -q
+      - name: Sidecar starts and answers its health check
+        run: |
+          SECRET_KEY=$(openssl rand -hex 32) PORT=3100 SDK_STATE_FILE=$RUNNER_TEMP/state.json node server.js > $RUNNER_TEMP/sidecar.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fs http://127.0.0.1:3100/api/health && exit 0
+            sleep 2
+          done
+          cat $RUNNER_TEMP/sidecar.log; exit 1
