@@ -1,0 +1,21 @@
+PaC Event Signer
+Copyright (c) 2026 Cyberfort SIA, Latvia.
+
+Licensed under the Apache License, Version 2.0 - see LICENSE.
+Part of the Process-as-Code open-source stack: https://github.com/ProcessAsCode
+
+--------------------------------------------------------------------------
+PROVENANCE
+--------------------------------------------------------------------------
+
+Derived from VeriDocs SDK (https://github.com/Veritrust-VC/VeriDocs-SDK),
+by the same author, previously published under the MIT License. The full
+commit history of that project is preserved in this repository.
+
+--------------------------------------------------------------------------
+THIRD-PARTY DEPENDENCIES
+--------------------------------------------------------------------------
+
+This project depends on third-party open-source packages declared in
+package.json (including the Veramo framework). Each remains under its own
+licence. Dependencies are not vendored into this repository.

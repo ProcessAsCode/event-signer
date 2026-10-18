@@ -1,7 +1,7 @@
 {
-  "name": "veridocs-sdk",
+  "name": "event-signer",
   "version": "0.1.0",
-  "description": "VeriDocs SDK — Document lifecycle DID/VC sidecar for DMS integration",
+  "description": "PaC Event Signer: DID/VC signing of every process and document transaction for a verifiable audit trail",
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
@@ -37,5 +37,6 @@
   },
   "devDependencies": {
     "patch-package": "^8.0.0"
-  }
+  },
+  "license": "Apache-2.0"
 }

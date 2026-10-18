@@ -1,8 +1,10 @@
-# VeriDocs SDK
+# PaC Event Signer
 
-Docker sidecar for integrating document lifecycle DID/VC capabilities into any Document Management System.
+Docker sidecar that signs every process and document transaction as a W3C Verifiable Credential, giving a Process-as-Code deployment a tamper-evident audit trail. Part of the [Process-as-Code](https://github.com/ProcessAsCode) stack.
 
-Run it alongside your DMS. Every document lifecycle action — created, sent, received, assigned, decided, archived — is signed as a W3C Verifiable Credential and submitted to the central [VeriDocs Register](https://github.com/Veritrust-VC/VeriDocs-Register).
+The first integration profile covers document lifecycle events in a Document Management System such as [OpenDMS](https://github.com/ProcessAsCode/opendms).
+
+Run it alongside your DMS. Every document lifecycle action — created, sent, received, assigned, decided, archived — is signed as a W3C Verifiable Credential and submitted to the central VeriDocs Register (the register is a separate VeriTrust component).
 
 Uses the same Veramo 6.x agent, JsonWebSignature2020 proof type, ES256K signatures, and StatusList2021 revocation. Credentials issued by VeriDocs SDK are interoperable with VeriTrust production.
 
@@ -37,8 +39,8 @@ Your DMS calls the SDK via simple HTTP. The SDK handles all DID/VC complexity �
 ### 1. Start the SDK
 
 ```bash
-git clone https://github.com/Veritrust-VC/VeriDocs-SDK.git
-cd VeriDocs-SDK
+git clone https://github.com/ProcessAsCode/event-signer.git
+cd event-signer
 cp .env.example .env
 docker compose up --build
 ```
@@ -178,7 +180,7 @@ DELEGATE_API_KEY=your-registry-api-key
 ## Project Structure
 
 ```
-VeriDocs-SDK/
+event-signer/
 ├── server.js                    # Express REST API (DVS-facing)
 ├── agent-setup.js               # Veramo 6.x agent (VeriTrust fork)
 ├── custom-data-store.js         # SQLite key/DID stores
@@ -249,12 +251,12 @@ services:
 
 | Repository | Description |
 |------------|-------------|
-| [VeriDocs-Register](https://github.com/Veritrust-VC/VeriDocs-Register) | Central DID/VC registry. Receives and verifies lifecycle VCs submitted by SDK instances. |
-| [OpenDMS](https://github.com/Veritrust-VC/OpenDMS) | Reference DMS with VeriDocs SDK pre-integrated. Every document action fires VCs automatically. |
+| VeriDocs Register (VeriTrust, separate component) | Central DID/VC registry. Receives and verifies lifecycle VCs submitted by signer instances. |
+| [OpenDMS](https://github.com/ProcessAsCode/opendms) | Reference DMS with the event signer pre-integrated. Every document action fires VCs automatically. |
 
 ## License
 
-MIT
+Apache-2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE). Derived from VeriDocs SDK, previously MIT.
 
 ## Persistence
 
